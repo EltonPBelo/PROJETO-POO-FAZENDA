@@ -1,1 +1,4 @@
 *.class
+run.bat
+
+# Nesse arquivos tem a exclusão de arquivos não importantes para o projeto

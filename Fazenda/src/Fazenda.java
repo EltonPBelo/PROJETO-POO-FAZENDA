@@ -180,29 +180,54 @@ class Fazenda {
   String nome;
   double dimensao;
   String localizacao;
-  ArrayList<Animal> listaAnimais;
+  ArrayList<Animal> listaAnimais ;
   ArrayList<Funcionario> listaFuncionarios;
   double valorArrecadado;
 
   // Construtor e métodos da fazenda
+  public Fazenda(){
+    this.listaAnimais = new ArrayList<Animal>();
+  }
+
   public static void main(String[] args) {
+    Fazenda fazenda = new Fazenda();
     Gado gado = new Gado();
-    gado.emitirSom();
-    gado.exibirEstado();
-    gado.alimentar(20); // comeu 20kg de alimento
-    gado.exibirEstado();
-    gado.alimentar(5); // comeu 5kg de alimento
-    gado.exibirEstado();
-    gado.alimentar(12);// comeu 12kg de alimento
-    gado.exibirEstado();
+
+    fazenda.adicionarAnimal(gado);
+    gado.alimentar(300);
+
+    fazenda.abaterAnimal(gado);
   }
 
   public void adicionarAnimal(Animal animal) {
+    this.listaAnimais.add(animal);
+
+    System.out.println(String.format("O animal %s foi adicionado a fazenda", animal.getTipo()));
     // Implementação para adicionar um animal à fazenda
   }
 
-  public void removerAnimal(Animal animal) {
-    // Implementação para remover um animal da fazenda
+
+  public void abaterAnimal(Animal animal){
+    final int abate;
+    final double lucro;
+    if (animal.getTipo().toLowerCase() ==  "porco"){
+      abate = 400; //ex
+    } else {
+      abate = 700;
+    }
+
+    if (animal.getPeso() >= abate){
+      System.out.println(String.format("O animal %s foi abatido com o peso de %.0fkg", animal.getTipo(), animal.getPeso()));
+      lucro = animal.calcularPreco();
+      System.out.println(String.format("A fazenda obeteve um lurco de R$%.2f", lucro));
+      this.listaAnimais.remove(animal);
+       
+      // adicionar o lucro a folha de pagamento
+
+    } else {
+        System.out.println(String.format("O animal %s não cumpre os requisitos para ser abatido", animal.getTipo()));
+    }
+
   }
 
   public void adicionarFuncionario(Funcionario funcionario) {
