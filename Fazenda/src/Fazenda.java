@@ -25,6 +25,9 @@ class Animal implements Alimentavel, Sonoro, Exibivel {
   }
 
   int idade;
+  public int getIdade(){
+    return this.idade;
+  }
 
   private String tipo = "Animal";
 
@@ -53,30 +56,38 @@ class Animal implements Alimentavel, Sonoro, Exibivel {
   @Override
   public void exibirEstado() {
     // Implementação da exibição do estado comum a todos os animais
-    System.out.println(String.format("O peso do animal é: %.2f ", this.getPeso()));
+    System.out.println(String.format("O peso do animal é: %.0fkg", this.getPeso()));
+    System.out.println(String.format("A idade do animal é: %d anos", this.getIdade()));
+    System.out.println(String.format("O preço do animal é: R$%.1f", this.calcularPreco()));
+
   }
 
   public double calcularPreco() {
     // Implementação do cálculo do preço comum a todos os animais
+  
     return 0.0;
   }
 }
 
 class Gado extends Animal {
   private String tipo = "Gado";
-  public double peso = 450.0d;
-
   public String getTipo() {
     return tipo;
   }
 
-  private String som = "Muuuh";
+  public int idade = 0; // Animal nasceu a pouco tempo.
+  @Override
+  public int getIdade() {
+    return this.idade;
+  }
 
+  private String som = "Muuuh";
   @Override
   public String getSom() {
     return this.som;
   }
 
+  public double peso = 450.0d;
   @Override
   public double getPeso(){
     return this.peso;
@@ -85,6 +96,14 @@ class Gado extends Animal {
   @Override
   public void setPeso(double peso) {
     this.peso = peso;
+  }
+
+  public int arroba = 250;
+  @Override
+  public double calcularPreco() {
+    final double arroba = this.getPeso() / 15;
+    final double preco  = arroba * this.arroba;
+    return preco;
   }
 }
 
