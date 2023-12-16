@@ -175,6 +175,26 @@ class Gerente extends Funcionario {
   // Construtor e métodos específicos para gerente
 }
 
+class Abate {
+  public double receita;
+  public double peso;
+  public String tipo;
+  public Abate(
+    double receita,
+    double peso,
+    String tipo
+  ){
+    this.receita = receita;
+    this.peso = peso;
+    this.tipo = tipo;
+  }
+
+  @Override
+  public String toString() {
+    return String.format("O animal %s foi abatido com o peso %.0fkg e gerou a receita de R$%.0f", this.tipo, this.peso, this.receita);
+  }
+}
+
 class Fazenda {
   // Atributos da fazenda
   String nome;
@@ -182,21 +202,29 @@ class Fazenda {
   String localizacao;
   ArrayList<Animal> listaAnimais ;
   ArrayList<Funcionario> listaFuncionarios;
+  ArrayList<Abate> listaAbates;
   double valorArrecadado;
 
   // Construtor e métodos da fazenda
   public Fazenda(){
     this.listaAnimais = new ArrayList<Animal>();
+    this.listaAbates = new ArrayList<Abate>();
   }
 
   public static void main(String[] args) {
     Fazenda fazenda = new Fazenda();
     Gado gado = new Gado();
+    Gado gado_2 = new Gado();
 
     fazenda.adicionarAnimal(gado);
+
     gado.alimentar(300);
+    gado_2.alimentar(500);
 
     fazenda.abaterAnimal(gado);
+    fazenda.abaterAnimal(gado_2); // não será possivel pois o animal não está na fazenda
+
+    fazenda.gerarRelatorio();
   }
 
   public void adicionarAnimal(Animal animal) {
@@ -210,6 +238,12 @@ class Fazenda {
   public void abaterAnimal(Animal animal){
     final int abate;
     final double lucro;
+
+    if (!this.listaAnimais.contains(animal)){ //verificação se o animal está na fazenda caso não esteja o sitema é bloqueado.
+      System.out.println(String.format("O animal %s não está presente na fazenda", animal.getTipo()));
+      return;
+    }
+
     if (animal.getTipo().toLowerCase() ==  "porco"){
       abate = 400; //ex
     } else {
@@ -219,9 +253,11 @@ class Fazenda {
     if (animal.getPeso() >= abate){
       System.out.println(String.format("O animal %s foi abatido com o peso de %.0fkg", animal.getTipo(), animal.getPeso()));
       lucro = animal.calcularPreco();
-      System.out.println(String.format("A fazenda obeteve um lurco de R$%.2f", lucro));
+      System.out.println(String.format("A fazenda obeteve um lucro de R$%.2f", lucro));
+      Abate abate_ = new Abate(lucro, animal.getPeso(), animal.getTipo());
+      this.listaAbates.add(abate_);
       this.listaAnimais.remove(animal);
-       
+
       // adicionar o lucro a folha de pagamento
 
     } else {
@@ -249,7 +285,19 @@ class Fazenda {
   }
 
   public void gerarRelatorio() {
-    // Implementação para gerar relatório
+    System.out.println("\n-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
+    System.out.println(" - Relatorio da Fazenda");
+    System.out.println("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
+    System.out.println(String.format("Abates totais: %d\n", this.listaAbates.size()));
+    String pre_relatorio = "";
+    for (Abate e : this.listaAbates){
+      pre_relatorio += e.toString() + "\n";
+      // nesse for, vocês tem acesso a todos os abates da fazenda
+      // nessa varivel pre_relatorio nela contem as informações de todos os abates da fazenda ai só colocar o valor dela no arquivo txt. 
+    }
+
+    System.out.println("Mais informações:");
+    System.out.println(pre_relatorio);
   }
 
   // Outros métodos necessários
